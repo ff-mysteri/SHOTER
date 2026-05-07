@@ -1,18 +1,20 @@
-import pygame
+
 from pygame import *
 from random import *
 
 
 
-pygame.init()
+
 # создай окно игры
 
 WIN_W = 700
 WIN_H = 500
 FPS  = 90
+
+clock = time.Clock()
 # название окна 
 display.set_caption('Pin-pong')
-back = transform.scale(image.load('hole.jpg'), (WIN_W, WIN_H))
+back = transform.scale(image.load('fon.png'), (WIN_W, WIN_H))
 window = display.set_mode((700, 500)) 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, width=65, height=65):
@@ -32,30 +34,56 @@ class GameSprite(sprite.Sprite):
 
 class Player(GameSprite):
 
-    def update(self):
+    def update_l(self):
 
         keys = key.get_pressed()
 
-    # клавиша a (влево)
-        if keys[K_a] and self.rect.y > 0:
-            self.rect.x -= self.speed
 
-    # клавиша d (вправо)
-        if keys[K_d] and self.rect.y < 720 - 80:
-            self.rect.x += self.speed
+        if keys[K_w] and self.rect.y > 15:
+            self.rect.y -= self.speed
 
 
+        if keys[K_s] and self.rect.y < 365:
+            self.rect.y += self.speed
+    
+    def update_r(self):
+
+        keys = key.get_pressed()
+
+        if keys[K_UP] and self.rect.y > 15:
+            self.rect.y -= self.speed
+
+
+        if keys[K_DOWN] and self.rect.y < 365:
+            self.rect.y += self.speed
+
+player_left = Player('f.png', 20, 192, 2, 15, 120)
+player_right = Player('f.png', 665, 192, 2, 15, 120)
+pool = Player('poo.png', 320, 220, 4, 65, 65)
 finish = False
-game = False
+game = True
 # Игровой цикл
 while game:
 
 #обработай событие «клик по кнопке "Закрыть окно"»
     for e in event.get():
         if e.type == QUIT:
-            game = True
+            game = False
     if finish != True:
         window.blit(back, (0, 0))
+
+        player_left.reset()
+
+        player_left.update_l()
+
+        player_right.reset()
+
+        player_right.update_r()
+
+        pool.reset()
+
+        
+
 
         # добавление кадров/секунду
         clock.tick(FPS)
@@ -64,4 +92,4 @@ while game:
         # обновление дисплея (картинки)
         display.update()
 
-        pygame.event.pump()
+        event.pump()
