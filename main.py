@@ -17,7 +17,7 @@ display.set_caption('Pin-pong')
 back = transform.scale(image.load('fon.png'), (WIN_W, WIN_H))
 window = display.set_mode((700, 500)) 
 class GameSprite(sprite.Sprite):
-    def __init__(self, player_image, player_x, player_y, player_speed, width=65, height=65):
+    def __init__(self, player_image, player_x , player_y, player_speed = 0, width=65, height=65):
 
         super().__init__()
         self.image = transform.scale(image.load(player_image), (width, height))
@@ -57,9 +57,30 @@ class Player(GameSprite):
         if keys[K_DOWN] and self.rect.y < 365:
             self.rect.y += self.speed
 
+player_speed_x = 3
+
+player_speed_y = 3
+
+class Poool(GameSprite):
+    def __init__(self, player_image, player_x, player_y, player_speed_x = 3, player_speed_y = 3, width=65, height=65):
+
+        super().__init__(self, player_image, player_x, player_y)
+        self.player_speed_x = player_speed_x
+        self.player_speed_y = player_speed_y
+
+    def update():
+        self.rect.x += self.player_speed_x
+        self.rect.y += self.layer_speed_y
+        if sprite.collide_rect(player_left, pool) or sprite.collide_rect(player_right, pool):
+            self.player_speed_x *= -1
+
+
+
 player_left = Player('f.png', 20, 192, 2, 15, 120)
 player_right = Player('f.png', 665, 192, 2, 15, 120)
-pool = Player('poo.png', 320, 220, 4, 65, 65)
+pool = Poool('poo.png', 320, 220, 3, 3, 65, 65)
+
+
 finish = False
 game = True
 # Игровой цикл
@@ -81,7 +102,8 @@ while game:
         player_right.update_r()
 
         pool.reset()
-
+        
+    
         
 
 
